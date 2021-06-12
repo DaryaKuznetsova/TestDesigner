@@ -80,36 +80,11 @@ namespace DiagramDesigner
 
             drawingPen = new Pen(Brushes.LightSlateGray, 1);
             drawingPen.LineJoin = PenLineJoin.Round;
+
+            base.Unloaded += new RoutedEventHandler(ConnectionAdorner_Unloaded);
         }
+                
 
-        private void InitializeDragThumbs()
-        {
-            Style dragThumbStyle = connection.FindResource("ConnectionAdornerThumbStyle") as Style;
-
-            //source drag thumb
-            sourceDragThumb = new Thumb();
-            Canvas.SetLeft(sourceDragThumb, connection.AnchorPositionSource.X);
-            Canvas.SetTop(sourceDragThumb, connection.AnchorPositionSource.Y);
-            this.adornerCanvas.Children.Add(sourceDragThumb);
-            if (dragThumbStyle != null)
-                sourceDragThumb.Style = dragThumbStyle;
-
-            sourceDragThumb.DragDelta += new DragDeltaEventHandler(thumbDragThumb_DragDelta);
-            sourceDragThumb.DragStarted += new DragStartedEventHandler(thumbDragThumb_DragStarted);
-            sourceDragThumb.DragCompleted += new DragCompletedEventHandler(thumbDragThumb_DragCompleted);
-
-            // sink drag thumb
-            sinkDragThumb = new Thumb();
-            Canvas.SetLeft(sinkDragThumb, connection.AnchorPositionSink.X);
-            Canvas.SetTop(sinkDragThumb, connection.AnchorPositionSink.Y);
-            this.adornerCanvas.Children.Add(sinkDragThumb);
-            if (dragThumbStyle != null)
-                sinkDragThumb.Style = dragThumbStyle;
-
-            sinkDragThumb.DragDelta += new DragDeltaEventHandler(thumbDragThumb_DragDelta);
-            sinkDragThumb.DragStarted += new DragStartedEventHandler(thumbDragThumb_DragStarted);
-            sinkDragThumb.DragCompleted += new DragCompletedEventHandler(thumbDragThumb_DragCompleted);
-        }
         void AnchorPositionChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName.Equals("AnchorPositionSource"))
@@ -185,6 +160,46 @@ namespace DiagramDesigner
             return finalSize;
         }
 
+        private void ConnectionAdorner_Unloaded(object sender, RoutedEventArgs e)
+        {
+            sourceDragThumb.DragDelta -= new DragDeltaEventHandler(thumbDragThumb_DragDelta);
+            sourceDragThumb.DragStarted -= new DragStartedEventHandler(thumbDragThumb_DragStarted);
+            sourceDragThumb.DragCompleted -= new DragCompletedEventHandler(thumbDragThumb_DragCompleted);
+
+            sinkDragThumb.DragDelta -= new DragDeltaEventHandler(thumbDragThumb_DragDelta);
+            sinkDragThumb.DragStarted -= new DragStartedEventHandler(thumbDragThumb_DragStarted);
+            sinkDragThumb.DragCompleted -= new DragCompletedEventHandler(thumbDragThumb_DragCompleted);
+        }
+
+        private void InitializeDragThumbs()
+        {
+            Style dragThumbStyle = connection.FindResource("ConnectionAdornerThumbStyle") as Style;
+
+            //source drag thumb
+            sourceDragThumb = new Thumb();
+            Canvas.SetLeft(sourceDragThumb, connection.AnchorPositionSource.X);
+            Canvas.SetTop(sourceDragThumb, connection.AnchorPositionSource.Y);
+            this.adornerCanvas.Children.Add(sourceDragThumb);
+            if (dragThumbStyle != null)
+                sourceDragThumb.Style = dragThumbStyle;
+
+            sourceDragThumb.DragDelta += new DragDeltaEventHandler(thumbDragThumb_DragDelta);
+            sourceDragThumb.DragStarted += new DragStartedEventHandler(thumbDragThumb_DragStarted);
+            sourceDragThumb.DragCompleted += new DragCompletedEventHandler(thumbDragThumb_DragCompleted);
+
+            // sink drag thumb
+            sinkDragThumb = new Thumb();
+            Canvas.SetLeft(sinkDragThumb, connection.AnchorPositionSink.X);
+            Canvas.SetTop(sinkDragThumb, connection.AnchorPositionSink.Y);
+            this.adornerCanvas.Children.Add(sinkDragThumb);
+            if (dragThumbStyle != null)
+                sinkDragThumb.Style = dragThumbStyle;
+
+            sinkDragThumb.DragDelta += new DragDeltaEventHandler(thumbDragThumb_DragDelta);
+            sinkDragThumb.DragStarted += new DragStartedEventHandler(thumbDragThumb_DragStarted);
+            sinkDragThumb.DragCompleted += new DragCompletedEventHandler(thumbDragThumb_DragCompleted);
+        }
+
         private PathGeometry UpdatePathGeometry(Point position)
         {
             PathGeometry geometry = new PathGeometry();
@@ -237,5 +252,6 @@ namespace DiagramDesigner
             HitConnector = null;
             HitDesignerItem = null;
         }
+
     }
 }

@@ -23,9 +23,7 @@ namespace DiagramDesigner.Controls
                 double minTop = double.MaxValue;
 
                 // we only move DesignerItems
-                var designerItems = from item in designer.SelectedItems
-                                    where item is DesignerItem
-                                    select item;
+                var designerItems = designer.SelectionService.CurrentSelection.OfType<DesignerItem>();
 
                 foreach (DesignerItem item in designerItems)
                 {

@@ -61,7 +61,7 @@ namespace DiagramDesigner
         public Connector()
         {
             // fired when layout changes
-            base.LayoutUpdated += new EventHandler(Connector_LayoutUpdated);
+            base.LayoutUpdated += new EventHandler(Connector_LayoutUpdated);            
         }
 
         // when the layout changes we update the position property

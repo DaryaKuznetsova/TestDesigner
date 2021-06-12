@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows;
@@ -10,30 +11,20 @@ using System.Xml;
 
 namespace DiagramDesigner
 {
-    public class DesignerCanvas : Canvas
+    public partial class DesignerCanvas : Canvas
     {
-        // start point of the rubberband drag operation
         private Point? rubberbandSelectionStartPoint = null;
 
-        // keep track of selected items 
-        private List<ISelectable> selectedItems;
-        public List<ISelectable> SelectedItems
+        private SelectionService selectionService;
+        internal SelectionService SelectionService
         {
             get
             {
-                if (selectedItems == null)
-                    selectedItems = new List<ISelectable>();
-                return selectedItems;
-            }
-            set
-            {
-                selectedItems = value;
-            }
-        }
+                if (selectionService == null)
+                    selectionService = new SelectionService(this);
 
-        public DesignerCanvas()
-        {
-            this.AllowDrop = true;
+                return selectionService;
+            }
         }
 
         protected override void OnMouseDown(MouseButtonEventArgs e)
@@ -41,16 +32,14 @@ namespace DiagramDesigner
             base.OnMouseDown(e);
             if (e.Source == this)
             {
-                // in case that this click is the start for a 
+                // in case that this click is the start of a 
                 // drag operation we cache the start point
                 this.rubberbandSelectionStartPoint = new Point?(e.GetPosition(this));
 
                 // if you click directly on the canvas all 
                 // selected items are 'de-selected'
-                foreach (ISelectable item in SelectedItems)
-                    item.IsSelected = false;
-                selectedItems.Clear();
-
+                SelectionService.ClearSelection();
+                Focus();
                 e.Handled = true;
             }
         }
@@ -112,14 +101,13 @@ namespace DiagramDesigner
                         DesignerCanvas.SetTop(newItem, Math.Max(0, position.Y));
                     }
 
-                    this.Children.Add(newItem);
+                    Canvas.SetZIndex(newItem, this.Children.Count);
+                    this.Children.Add(newItem);                    
+                    SetConnectorDecoratorTemplate(newItem);
 
                     //update selection
-                    foreach (ISelectable item in this.SelectedItems)
-                        item.IsSelected = false;
-                    SelectedItems.Clear();
-                    newItem.IsSelected = true;
-                    this.SelectedItems.Add(newItem);
+                    this.SelectionService.SelectItem(newItem);
+                    newItem.Focus();
                 }
 
                 e.Handled = true;
@@ -129,7 +117,8 @@ namespace DiagramDesigner
         protected override Size MeasureOverride(Size constraint)
         {
             Size size = new Size();
-            foreach (UIElement element in base.Children)
+
+            foreach (UIElement element in this.InternalChildren)
             {
                 double left = Canvas.GetLeft(element);
                 double top = Canvas.GetTop(element);
@@ -150,6 +139,17 @@ namespace DiagramDesigner
             size.Width += 10;
             size.Height += 10;
             return size;
+        }
+
+        private void SetConnectorDecoratorTemplate(DesignerItem item)
+        {
+            if (item.ApplyTemplate() && item.Content is UIElement)
+            {
+                ControlTemplate template = DesignerItem.GetConnectorDecoratorTemplate(item.Content as UIElement);
+                Control decorator = item.Template.FindName("PART_ConnectorDecorator", item) as Control;
+                if (decorator != null && template != null)
+                    decorator.Template = template;
+            }
         }
     }
 }

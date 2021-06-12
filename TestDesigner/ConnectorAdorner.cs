@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Controls;
 
 namespace DiagramDesigner
 {
@@ -63,8 +64,9 @@ namespace DiagramDesigner
                 Connector sinkConnector = this.HitConnector;
                 Connection newConnection = new Connection(sourceConnector, sinkConnector);
 
-                // connections are added with z-index of zero
-                this.designerCanvas.Children.Insert(0, newConnection);
+                Canvas.SetZIndex(newConnection, designerCanvas.Children.Count);
+                this.designerCanvas.Children.Add(newConnection);
+                
             }
             if (HitDesignerItem != null)
             {

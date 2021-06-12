@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -59,7 +60,7 @@ namespace DiagramDesigner
         {
             base.OnRender(dc);
 
-            // without a background the OnMouseMove event would not be fired !
+            // without a background the OnMouseMove event would not be fired!
             // Alternative: implement a Canvas as a child of this adorner, like
             // the ConnectionAdorner does.
             dc.DrawRectangle(Brushes.Transparent, null, new Rect(RenderSize));
@@ -70,9 +71,7 @@ namespace DiagramDesigner
 
         private void UpdateSelection()
         {
-            foreach (ISelectable item in designerCanvas.SelectedItems)
-                item.IsSelected = false;
-            designerCanvas.SelectedItems.Clear();
+            designerCanvas.SelectionService.ClearSelection();
 
             Rect rubberBand = new Rect(startPoint.Value, endPoint.Value);
             foreach (Control item in designerCanvas.Children)
@@ -80,11 +79,16 @@ namespace DiagramDesigner
                 Rect itemRect = VisualTreeHelper.GetDescendantBounds(item);
                 Rect itemBounds = item.TransformToAncestor(designerCanvas).TransformBounds(itemRect);
 
-                if (rubberBand.Contains(itemBounds) && item is ISelectable)
+                if (rubberBand.Contains(itemBounds))
                 {
-                    ISelectable selectableItem = item as ISelectable;
-                    selectableItem.IsSelected = true;
-                    designerCanvas.SelectedItems.Add(selectableItem);
+                    if (item is Connection)
+                        designerCanvas.SelectionService.AddToSelection(item as ISelectable);
+                    else
+                    {
+                        DesignerItem di = item as DesignerItem;
+                        if (di.ParentID == Guid.Empty)
+                            designerCanvas.SelectionService.AddToSelection(di);
+                    }
                 }
             }
         }

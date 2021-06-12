@@ -15,6 +15,8 @@ namespace DiagramDesigner
 
         #region Properties
 
+        public Guid ID { get; set; }
+
         // source connector
         private Connector source;
         public Connector Source
@@ -235,10 +237,12 @@ namespace DiagramDesigner
 
         public Connection(Connector source, Connector sink)
         {
+            this.ID = Guid.NewGuid();
             this.Source = source;
             this.Sink = sink;
             base.Unloaded += new RoutedEventHandler(Connection_Unloaded);
         }
+
 
         protected override void OnMouseDown(System.Windows.Input.MouseButtonEventArgs e)
         {
@@ -247,26 +251,23 @@ namespace DiagramDesigner
             // usual selection business
             DesignerCanvas designer = VisualTreeHelper.GetParent(this) as DesignerCanvas;
             if (designer != null)
+            {
                 if ((Keyboard.Modifiers & (ModifierKeys.Shift | ModifierKeys.Control)) != ModifierKeys.None)
                     if (this.IsSelected)
                     {
-                        this.IsSelected = false;
-                        designer.SelectedItems.Remove(this);
+                        designer.SelectionService.RemoveFromSelection(this);
                     }
                     else
                     {
-                        this.IsSelected = true;
-                        designer.SelectedItems.Add(this);
+                        designer.SelectionService.AddToSelection(this);
                     }
                 else if (!this.IsSelected)
                 {
-                    foreach (ISelectable item in designer.SelectedItems)
-                        item.IsSelected = false;
-
-                    designer.SelectedItems.Clear();
-                    this.IsSelected = true;
-                    designer.SelectedItems.Add(this);
+                    designer.SelectionService.SelectItem(this);
                 }
+
+                Focus();
+            }
             e.Handled = false;
         }
 
@@ -331,7 +332,7 @@ namespace DiagramDesigner
             {
                 DesignerCanvas designer = VisualTreeHelper.GetParent(this) as DesignerCanvas;
 
-                AdornerLayer adornerLayer = AdornerLayer.GetAdornerLayer(designer);
+                AdornerLayer adornerLayer = AdornerLayer.GetAdornerLayer(this);
                 if (adornerLayer != null)
                 {
                     this.connectionAdorner = new ConnectionAdorner(designer, this);
@@ -352,15 +353,15 @@ namespace DiagramDesigner
             // do some housekeeping when Connection is unloaded
 
             // remove event handler
-            source.PropertyChanged -= new PropertyChangedEventHandler(OnConnectorPositionChanged);
-            sink.PropertyChanged -= new PropertyChangedEventHandler(OnConnectorPositionChanged);
+            this.Source = null;
+            this.Sink = null;
 
             // remove adorner
             if (this.connectionAdorner != null)
             {
                 DesignerCanvas designer = VisualTreeHelper.GetParent(this) as DesignerCanvas;
 
-                AdornerLayer adornerLayer = AdornerLayer.GetAdornerLayer(designer);
+                AdornerLayer adornerLayer = AdornerLayer.GetAdornerLayer(this);
                 if (adornerLayer != null)
                 {
                     adornerLayer.Remove(this.connectionAdorner);

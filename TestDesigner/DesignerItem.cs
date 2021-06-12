@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -11,8 +12,35 @@ namespace DiagramDesigner
     [TemplatePart(Name = "PART_ResizeDecorator", Type = typeof(Control))]
     [TemplatePart(Name = "PART_ConnectorDecorator", Type = typeof(Control))]
     [TemplatePart(Name = "PART_ContentPresenter", Type = typeof(ContentPresenter))]
-    public class DesignerItem : ContentControl, ISelectable
+    public class DesignerItem : ContentControl, ISelectable, IGroupable
     {
+        #region ID
+        private Guid id;
+        public Guid ID
+        {
+            get { return id; }
+        }
+        #endregion
+
+        #region ParentID
+        public Guid ParentID
+        {
+            get { return (Guid)GetValue(ParentIDProperty); }
+            set { SetValue(ParentIDProperty, value); }
+        }
+        public static readonly DependencyProperty ParentIDProperty = DependencyProperty.Register("ParentID", typeof(Guid), typeof(DesignerItem));
+        #endregion
+
+        #region IsGroup
+        public bool IsGroup
+        {
+            get { return (bool)GetValue(IsGroupProperty); }
+            set { SetValue(IsGroupProperty, value); }
+        }
+        public static readonly DependencyProperty IsGroupProperty =
+            DependencyProperty.Register("IsGroup", typeof(bool), typeof(DesignerItem));
+        #endregion
+
         #region IsSelected Property
 
         public bool IsSelected
@@ -89,10 +117,17 @@ namespace DiagramDesigner
                 typeof(DesignerItem), new FrameworkPropertyMetadata(typeof(DesignerItem)));
         }
 
-        public DesignerItem()
+        public DesignerItem(Guid id)
         {
+            this.id = id;
             this.Loaded += new RoutedEventHandler(DesignerItem_Loaded);
         }
+
+        public DesignerItem()
+            : this(Guid.NewGuid())
+        {
+        }
+
 
         protected override void OnPreviewMouseDown(MouseButtonEventArgs e)
         {
@@ -101,36 +136,28 @@ namespace DiagramDesigner
 
             // update selection
             if (designer != null)
+            {
                 if ((Keyboard.Modifiers & (ModifierKeys.Shift | ModifierKeys.Control)) != ModifierKeys.None)
                     if (this.IsSelected)
                     {
-                        this.IsSelected = false;
-                        designer.SelectedItems.Remove(this);
+                        designer.SelectionService.RemoveFromSelection(this);
                     }
                     else
                     {
-                        this.IsSelected = true;
-                        designer.SelectedItems.Add(this);
+                        designer.SelectionService.AddToSelection(this);
                     }
                 else if (!this.IsSelected)
                 {
-                    foreach (ISelectable item in designer.SelectedItems)
-                        item.IsSelected = false;
-
-                    designer.SelectedItems.Clear();
-                    this.IsSelected = true;
-                    designer.SelectedItems.Add(this);
+                    designer.SelectionService.SelectItem(this);
                 }
+                Focus();
+            }
+
             e.Handled = false;
         }
 
         void DesignerItem_Loaded(object sender, RoutedEventArgs e)
         {
-            // if DragThumbTemplate and ConnectorDecoratorTemplate properties of this class
-            // are set these templates are applied; 
-            // Note: this method is only executed when the Loaded event is fired, so
-            // setting DragThumbTemplate or ConnectorDecoratorTemplate properties after
-            // will have no effect.
             if (base.Template != null)
             {
                 ContentPresenter contentPresenter =
@@ -141,23 +168,12 @@ namespace DiagramDesigner
                     if (contentVisual != null)
                     {
                         DragThumb thumb = this.Template.FindName("PART_DragThumb", this) as DragThumb;
-                        Control connectorDecorator = this.Template.FindName("PART_ConnectorDecorator", this) as Control;
-
                         if (thumb != null)
                         {
                             ControlTemplate template =
                                 DesignerItem.GetDragThumbTemplate(contentVisual) as ControlTemplate;
                             if (template != null)
                                 thumb.Template = template;
-                        }
-
-
-                        if (connectorDecorator != null)
-                        {
-                            ControlTemplate template =
-                                DesignerItem.GetConnectorDecoratorTemplate(contentVisual) as ControlTemplate;
-                            if (template != null)
-                                connectorDecorator.Template = template;
                         }
                     }
                 }
