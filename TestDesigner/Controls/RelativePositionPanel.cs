@@ -18,6 +18,7 @@ namespace DiagramDesigner.Controls
             {
                 throw new ArgumentNullException("element");
             }
+
             return (Point)element.GetValue(RelativePositionProperty);
         }
 
@@ -57,6 +58,7 @@ namespace DiagramDesigner.Controls
                     if (double.IsNaN(y)) y = 0;
 
                     element.Arrange(new Rect(new Point(x, y), element.DesiredSize));
+
                 }
             }
             return arrangeSize;

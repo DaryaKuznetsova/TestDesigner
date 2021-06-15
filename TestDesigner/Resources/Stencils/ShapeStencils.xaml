@@ -3,73 +3,85 @@
                     xmlns:s="clr-namespace:DiagramDesigner"
                     xmlns:c="clr-namespace:DiagramDesigner.Controls">
 
-  <RadialGradientBrush x:Key="RadialBrushOrange" Center="0.2, 0.2" GradientOrigin="0.2, 0.2" RadiusX="0.8" RadiusY="0.8">
-    <GradientStop Color="White" Offset="0"/>
-    <GradientStop Color="Orange" Offset="0.9"/>
-  </RadialGradientBrush>
+    <Brush x:Key="ItemStroke">#000</Brush>
+    <LinearGradientBrush x:Key="ItemBrush" StartPoint="0,0" EndPoint="0,1">
+        <LinearGradientBrush.GradientStops>
+            <GradientStop Color="White" Offset="0" />
+        </LinearGradientBrush.GradientStops>
+    </LinearGradientBrush>
 
-  <RadialGradientBrush x:Key="RadialBrushGreen" Center="0.2, 0.2" GradientOrigin="0.2, 0.2" RadiusX="0.8" RadiusY="0.8">
-    <GradientStop Color="White" Offset="0"/>
-    <GradientStop Color="Green" Offset="0.9"/>
-  </RadialGradientBrush>
+    <Style x:Key="FlowChartItemStyle" TargetType="Path">
+        <Setter Property="Fill" Value="{StaticResource ItemBrush}"/>
+        <Setter Property="Stroke" Value="{StaticResource ItemStroke}"/>
+        <Setter Property="StrokeThickness" Value="1.5"/>
+        <Setter Property="StrokeLineJoin" Value="Round"/>
+        <Setter Property="Stretch" Value="Fill"/>
+        <Setter Property="IsHitTestVisible" Value="False"/>
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
 
-  <RadialGradientBrush x:Key="RadialBrushBlue" Center="0.2, 0.2" GradientOrigin="0.2, 0.2" RadiusX="0.8" RadiusY="0.8">
-    <GradientStop Color="White" Offset="0"/>
-    <GradientStop Color="Blue" Offset="0.9"/>
-  </RadialGradientBrush>
-  
-  <LinearGradientBrush x:Key="Brush6" StartPoint="0,0" EndPoint="0,1" Opacity="1">
-    <LinearGradientBrush.GradientStops>
-      <GradientStop Color="#FAFBE9" Offset="0.1" />
-      <GradientStop Color="Orange" Offset="1" />
-    </LinearGradientBrush.GradientStops>
-  </LinearGradientBrush>
+    </Style>
 
-  <s:Toolbox x:Key="ShapeStencils" ItemSize="60,60">
+    <!-- Object -->
+    <Style x:Key="Process" TargetType="Path" BasedOn="{StaticResource FlowChartItemStyle}">
+        <Setter Property="Data" Value="M 0,0 H 60 V40 H 0 Z"/>
+    </Style>
+
+    <Style x:Key="Process_DragThumb" TargetType="Path" BasedOn="{StaticResource Process}">
+        <Setter Property="IsHitTestVisible" Value="true"/>
+        <Setter Property="Fill" Value="Transparent"/>
+        <Setter Property="Stroke" Value="Transparent"/>
+    </Style>
+
+    <!-- Use Case -->
+    <Style x:Key="Start" TargetType="Path" BasedOn="{StaticResource FlowChartItemStyle}">
+        <Setter Property="Data" Value="M 10,20 A 20,20 0 1 1 50,20 A 20,20 0 1 1 10,20"/>
+    </Style>
+
+    <Style x:Key="Start_DragThumb" TargetType="Path" BasedOn="{StaticResource Start}">
+        <Setter Property="IsHitTestVisible" Value="true"/>
+        <Setter Property="Fill" Value="Transparent"/>
+        <Setter Property="Stroke" Value="Transparent"/>
+    </Style>
+
+    <!-- Class -->
+    <Style x:Key="InternalStorage" TargetType="Path" BasedOn="{StaticResource FlowChartItemStyle}">
+        <Setter Property="Data" Value="M 0,10 H 60  M 0,0 H 60 V 40 H 0 Z"/>
+    </Style>
+
+    <Style x:Key="InternalStorage_DragThumb" TargetType="Path" BasedOn="{StaticResource InternalStorage}">
+        <Setter Property="IsHitTestVisible" Value="true"/>
+        <Setter Property="Fill" Value="Transparent"/>
+        <Setter Property="Stroke" Value="Transparent"/>
+    </Style>
+
+
+    <s:Toolbox x:Key="ShapeStencils" ItemSize="60,50">
     <ItemsControl.Items>
 
-      <Ellipse Fill="{StaticResource RadialBrushOrange}" ToolTip="Ellipse" IsHitTestVisible="false">
-        <Ellipse.BitmapEffect>
-          <DropShadowBitmapEffect Color="Gray" Direction="315" ShadowDepth="15" Softness="0.8" Opacity="0.4"/>
-        </Ellipse.BitmapEffect>
-      </Ellipse>
+            <Path Style="{StaticResource Process}" ToolTip="Object">
+                <s:DesignerItem.DragThumbTemplate>
+                    <ControlTemplate>
+                        <Path Style="{StaticResource Process_DragThumb}"/>
+                    </ControlTemplate>
+                </s:DesignerItem.DragThumbTemplate>
+            </Path>
 
-      <Ellipse Fill="{StaticResource RadialBrushBlue}" ToolTip="Ellipse" IsHitTestVisible="false">
-        <Ellipse.BitmapEffect>
-          <DropShadowBitmapEffect Color="Gray" Direction="315" ShadowDepth="15" Softness="0.8" Opacity="0.4"/>
-        </Ellipse.BitmapEffect>
-      </Ellipse>
+            <Path Style="{StaticResource Start}" ToolTip="Use Case">
+                <s:DesignerItem.DragThumbTemplate>
+                    <ControlTemplate>
+                        <Path Style="{StaticResource Start_DragThumb}"/>
+                    </ControlTemplate>
+                </s:DesignerItem.DragThumbTemplate>
+            </Path>
 
-      <Ellipse Fill="{StaticResource RadialBrushGreen}" ToolTip="Ellipse" IsHitTestVisible="false">
-        <Ellipse.BitmapEffect>
-          <DropShadowBitmapEffect Color="Gray" Direction="315" ShadowDepth="15" Softness="0.8" Opacity="0.4"/>
-        </Ellipse.BitmapEffect>
-      </Ellipse>
+            <Path Style="{StaticResource InternalStorage}" ToolTip="Class">
+                <s:DesignerItem.DragThumbTemplate>
+                    <ControlTemplate>
+                        <Path Style="{StaticResource InternalStorage_DragThumb}"/>
+                    </ControlTemplate>
+                </s:DesignerItem.DragThumbTemplate>
+            </Path>
 
-      <Path Stretch="Fill" IsHitTestVisible="false"
-            StrokeLineJoin="Round"
-            Fill="{StaticResource Brush6}"
-            Stroke="#AAFF8C00"
-            StrokeThickness="3"
-            Data="M 9,2 11,7 17,7 12,10 14,15 9,12 4,15 6,10 1,7 7,7 Z">
-        <s:DesignerItem.DragThumbTemplate>
-          <ControlTemplate>
-            <Path Fill="Transparent" Stretch="Fill" Data="M 9,2 11,7 17,7 12,10 14,15 9,12 4,15 6,10 1,7 7,7 Z"/>
-          </ControlTemplate>
-        </s:DesignerItem.DragThumbTemplate>
-        <s:DesignerItem.ConnectorDecoratorTemplate>
-          <ControlTemplate>
-            <c:RelativePositionPanel Margin="-4">
-              <s:Connector Orientation="Top" c:RelativePositionPanel.RelativePosition="0.5,0"/>
-              <s:Connector Orientation="Left" c:RelativePositionPanel.RelativePosition="0,0.385"/>
-              <s:Connector Orientation="Right" c:RelativePositionPanel.RelativePosition="1,0.385"/>
-              <s:Connector Orientation="Bottom" c:RelativePositionPanel.RelativePosition="0.185,1"/>
-              <s:Connector Orientation="Bottom" c:RelativePositionPanel.RelativePosition="0.815,1"/>
-            </c:RelativePositionPanel>
-          </ControlTemplate>
-        </s:DesignerItem.ConnectorDecoratorTemplate>
-      </Path>
-      
-    </ItemsControl.Items>
+        </ItemsControl.Items>
   </s:Toolbox>     
 </ResourceDictionary>

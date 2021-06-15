@@ -35,6 +35,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DiagramDesigner">
+      <HintPath>..\..\..\..\Downloads\MVVMDiagramDesigner-master (1)\MVVMDiagramDesigner-master\DiagramDesignerMVVM\DiagramDesigner\bin\Debug\DiagramDesigner.dll</HintPath>
+    </Reference>
+    <Reference Include="FileAccessService">
+      <HintPath>..\FileAccessService\bin\Debug\FileAccessService.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -62,6 +68,13 @@
     <Compile Include="SelectionService.cs" />
     <Compile Include="Toolbox.cs" />
     <Compile Include="ToolboxItem.cs" />
+    <Compile Include="ViewModel\DesignerItemData.cs" />
+    <Compile Include="ViewModel\ISupportDataChanges.cs" />
+    <Compile Include="ViewModel\DesignerItemViewModel.cs" />
+    <Compile Include="ViewModel\SettingsDesignerItemData.cs" />
+    <Compile Include="ViewModel\SettingsDesignerItemViewModel.cs" />
+    <Compile Include="ViewModel\ToolBoxViewModel.cs" />
+    <Compile Include="ViewModel\Window1ViewModel.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -94,6 +107,10 @@
     <Page Include="Resources\DesignerItem.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\ItemDetalization.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Resources\Stencils\FlowChartStencils.xaml">
       <Generator>MSBuild:Compile</Generator>

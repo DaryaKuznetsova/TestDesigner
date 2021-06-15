@@ -85,7 +85,7 @@
                     <Canvas DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}"
                             ContextMenu="{StaticResource ConnectionContextMenu}">
                         <Path Name="PART_ConnectionPath"
-                              StrokeThickness="2"
+                              StrokeThickness="1.5"
                               Stroke="{StaticResource SolidBorderBrush}"
                               StrokeStartLineCap="Round"
                               StrokeEndLineCap="Round"
@@ -121,9 +121,9 @@
                               </TextBlock.RenderTransform>
                             </TextBlock>-->
 
-                        <Canvas.BitmapEffect>
+                        <!--<Canvas.BitmapEffect>
                             <DropShadowBitmapEffect Color="Gray" Direction="315" ShadowDepth="10" Softness="0" Opacity="0.1"/>
-                        </Canvas.BitmapEffect>
+                        </Canvas.BitmapEffect>-->
                     </Canvas>
                     <ControlTemplate.Triggers>
                         <DataTrigger Value="Arrow" Binding="{Binding RelativeSource={RelativeSource Self},Path=SourceArrowSymbol}">

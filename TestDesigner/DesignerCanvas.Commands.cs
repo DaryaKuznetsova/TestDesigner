@@ -12,11 +12,14 @@ using System.Windows.Media;
 using System.Xml;
 using System.Xml.Linq;
 using Microsoft.Win32;
+using FileService;
 
 namespace DiagramDesigner
 {
     public partial class DesignerCanvas
     {
+        private FileAccessService fileAccessService;
+
         public static RoutedCommand Group = new RoutedCommand();
         public static RoutedCommand Ungroup = new RoutedCommand();
         public static RoutedCommand BringForward = new RoutedCommand();
@@ -35,9 +38,11 @@ namespace DiagramDesigner
 
         public DesignerCanvas()
         {
+            fileAccessService = new FileAccessService();
+
             this.CommandBindings.Add(new CommandBinding(ApplicationCommands.New, New_Executed));
             this.CommandBindings.Add(new CommandBinding(ApplicationCommands.Open, Open_Executed));
-            this.CommandBindings.Add(new CommandBinding(ApplicationCommands.Save, Save_Executed));
+           // this.CommandBindings.Add(new CommandBinding(ApplicationCommands.Save, Save_Executed));
             this.CommandBindings.Add(new CommandBinding(ApplicationCommands.Print, Print_Executed));
             this.CommandBindings.Add(new CommandBinding(ApplicationCommands.Cut, Cut_Executed, Cut_Enabled));
             this.CommandBindings.Add(new CommandBinding(ApplicationCommands.Copy, Copy_Executed, Copy_Enabled));
@@ -131,7 +136,7 @@ namespace DiagramDesigner
             root.Add(designerItemsXML);
             root.Add(connectionsXML);
 
-            SaveFile(root);
+            fileAccessService.SaveFile(root);
         }
 
         #endregion
@@ -569,6 +574,8 @@ namespace DiagramDesigner
                     }
                 }
             }
+
+            
         }
 
         #endregion
@@ -768,22 +775,6 @@ namespace DiagramDesigner
             return null;
         }
 
-        void SaveFile(XElement xElement)
-        {
-            SaveFileDialog saveFile = new SaveFileDialog();
-            saveFile.Filter = "Files (*.xml)|*.xml|All Files (*.*)|*.*";
-            if (saveFile.ShowDialog() == true)
-            {
-                try
-                {
-                    xElement.Save(saveFile.FileName);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.StackTrace, ex.Message, MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-            }
-        }
 
         private XElement LoadSerializedDataFromClipBoard()
         {

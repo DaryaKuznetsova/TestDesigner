@@ -163,12 +163,12 @@ namespace DiagramDesigner
         public ConnectorOrientation Orientation { get; set; }
     }
 
-    public enum ConnectorOrientation
-    {
-        None,
-        Left,
-        Top,
-        Right,
-        Bottom
-    }
+    //public enum ConnectorOrientation
+    //{
+    //    None,
+    //    Left,
+    //    Top,
+    //    Right,
+    //    Bottom
+    //}
 }

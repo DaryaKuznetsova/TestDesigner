@@ -20,9 +20,12 @@ namespace TestDesigner
     /// </summary>
     public partial class MainWindow : Window
     {
+        private Window1ViewModel window1ViewModel;
         public MainWindow()
         {
+            window1ViewModel = new Window1ViewModel();
             InitializeComponent();
+            this.DataContext = window1ViewModel;
         }
     }
 }

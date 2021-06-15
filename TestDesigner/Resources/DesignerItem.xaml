@@ -39,7 +39,7 @@
             </MenuItem>
         </MenuItem>
         <MenuItem Header="Order">
-            <MenuItem Header="Bring Forward" Command="{x:Static s:DesignerCanvas.BringForward}">
+            <MenuItem Header="Bring Forward">
                 <MenuItem.Icon>
                     <Image Source="Images/BringForward.png" Width="16"/>
                 </MenuItem.Icon>
@@ -92,7 +92,7 @@
     </ControlTemplate>
 
     <!-- ResizeDecorator Default Template -->
-    <ControlTemplate x:Key="ResizeDecoratorTemplate" TargetType="{x:Type Control}">
+    <!--<ControlTemplate x:Key="ResizeDecoratorTemplate" TargetType="{x:Type Control}">
         <Grid Opacity="0.7" SnapsToDevicePixels="true">
             <c:ResizeThumb Height="3" Cursor="SizeNS" Margin="0 -4 0 0"
                      VerticalAlignment="Top" HorizontalAlignment="Stretch"/>
@@ -111,7 +111,7 @@
             <c:ResizeThumb Width="7" Height="7" Cursor="SizeNWSE" Margin="0 0 -6 -6"
                      VerticalAlignment="Bottom" HorizontalAlignment="Right"/>
         </Grid>
-    </ControlTemplate>
+    </ControlTemplate>-->
 
     <!-- DragThumb Default Template -->
     <Style TargetType="{x:Type c:DragThumb}">
@@ -138,9 +138,9 @@
                         <c:DragThumb x:Name="PART_DragThumb" 
                                      Cursor="SizeAll"/>
                         <!-- PART_ResizeDecorator -->
-                        <Control x:Name="PART_ResizeDecorator" 
+                        <!--<Control x:Name="PART_ResizeDecorator" 
                                  Visibility="Collapsed"
-                                 Template="{StaticResource ResizeDecoratorTemplate}"/>
+                                 Template="{StaticResource ResizeDecoratorTemplate}"/>-->
                         <!-- PART_ContentPresenter -->
                         <ContentPresenter x:Name="PART_ContentPresenter"
                                           HorizontalAlignment="Stretch"
@@ -161,7 +161,7 @@
                                 <Condition Value="True" Binding="{Binding RelativeSource={RelativeSource Self},Path=IsSelected}"/>
                                 <Condition Value="{x:Static sys:Guid.Empty}" Binding="{Binding RelativeSource={RelativeSource Self},Path=ParentID}"/>
                             </MultiDataTrigger.Conditions>
-                            <Setter TargetName="PART_ResizeDecorator" Property="Visibility" Value="Visible"/>
+                            <!--<Setter TargetName="PART_ResizeDecorator" Property="Visibility" Value="Visible"/>-->
                         </MultiDataTrigger>
                         <Trigger Property="IsMouseOver" Value="true">
                             <Setter TargetName="PART_ConnectorDecorator" Property="Visibility" Value="Visible"/>

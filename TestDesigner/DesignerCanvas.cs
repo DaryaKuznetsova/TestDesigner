@@ -8,12 +8,14 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Markup;
 using System.Xml;
+using TestDesigner;
 
 namespace DiagramDesigner
 {
     public partial class DesignerCanvas : Canvas
     {
         private Point? rubberbandSelectionStartPoint = null;
+        private Window1ViewModel window1ViewModel = new Window1ViewModel();
 
         private SelectionService selectionService;
         internal SelectionService SelectionService
@@ -102,7 +104,9 @@ namespace DiagramDesigner
                     }
 
                     Canvas.SetZIndex(newItem, this.Children.Count);
-                    this.Children.Add(newItem);                    
+                    this.Children.Add(newItem);
+                    //DesignerItemViewModel designerItemViewModel = new DesignerItemViewModel(newItem.PersistId, new DiagramViewModel(), newItem.Width, newItem.Height);
+                    //window1ViewModel.DiagramViewModel.Items.Add(designerItemViewModel);
                     SetConnectorDecoratorTemplate(newItem);
 
                     //update selection

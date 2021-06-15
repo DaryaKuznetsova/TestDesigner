@@ -3,28 +3,22 @@
                     xmlns:s="clr-namespace:DiagramDesigner"
                     xmlns:c="clr-namespace:DiagramDesigner.Controls">
 
-  <Brush x:Key="ItemStroke">#FFD69436</Brush>
+  <Brush x:Key="ItemStroke">#000</Brush>
   <LinearGradientBrush x:Key="ItemBrush" StartPoint="0,0" EndPoint="0,1">
     <LinearGradientBrush.GradientStops>
-      <GradientStop Color="#FAFBE9" Offset="0" />
-      <GradientStop Color="Orange" Offset="1" />
-    </LinearGradientBrush.GradientStops>
+            <GradientStop Color="White" Offset="0" />
+        </LinearGradientBrush.GradientStops>
   </LinearGradientBrush>
 
   <Style x:Key="FlowChartItemStyle" TargetType="Path">
     <Setter Property="Fill" Value="{StaticResource ItemBrush}"/>
     <Setter Property="Stroke" Value="{StaticResource ItemStroke}"/>
-    <Setter Property="StrokeThickness" Value="2"/>
+    <Setter Property="StrokeThickness" Value="1.5"/>
     <Setter Property="StrokeLineJoin" Value="Round"/>
     <Setter Property="Stretch" Value="Fill"/>
     <Setter Property="IsHitTestVisible" Value="False"/>
     <Setter Property="SnapsToDevicePixels" Value="True"/>
-    <Setter Property="BitmapEffect">
-      <Setter.Value>
-        <DropShadowBitmapEffect Color="#AAA" Direction="315" ShadowDepth="10"
-                                Softness="0.5" Opacity="0.6"/>
-      </Setter.Value>
-    </Setter>
+    
   </Style>
 
   <!-- Process -->
@@ -71,16 +65,7 @@
     <Setter Property="Stroke" Value="Transparent"/>
   </Style>
 
-  <!-- Start -->
-  <Style x:Key="Start" TargetType="Path" BasedOn="{StaticResource FlowChartItemStyle}">
-    <Setter Property="Data" Value="M 10,20 A 20,20 0 1 1 50,20 A 20,20 0 1 1 10,20"/>
-  </Style>
 
-  <Style x:Key="Start_DragThumb" TargetType="Path" BasedOn="{StaticResource Start}">
-    <Setter Property="IsHitTestVisible" Value="true"/>
-    <Setter Property="Fill" Value="Transparent"/>
-    <Setter Property="Stroke" Value="Transparent"/>
-  </Style>
 
 
   <!-- Predefined -->
@@ -107,16 +92,7 @@
   </Style>
 
 
-  <!-- InternalStorage -->
-  <Style x:Key="InternalStorage" TargetType="Path" BasedOn="{StaticResource FlowChartItemStyle}">
-    <Setter Property="Data" Value="M 0,10 H 60 M 10,0 V 40 M 0,0 H 60 V 40 H 0 Z"/>
-  </Style>
-
-  <Style x:Key="InternalStorage_DragThumb" TargetType="Path" BasedOn="{StaticResource InternalStorage}">
-    <Setter Property="IsHitTestVisible" Value="true"/>
-    <Setter Property="Fill" Value="Transparent"/>
-    <Setter Property="Stroke" Value="Transparent"/>
-  </Style>
+  
 
   <!-- SequentialData -->
   <Style x:Key="SequentialData" TargetType="Path" BasedOn="{StaticResource FlowChartItemStyle}">
@@ -267,13 +243,6 @@
              ScrollViewer.HorizontalScrollBarVisibility="Disabled">
     <ItemsControl.Items>
 
-      <Path Style="{StaticResource Process}" ToolTip="Process">
-        <s:DesignerItem.DragThumbTemplate>
-          <ControlTemplate>
-            <Path Style="{StaticResource Process_DragThumb}"/>
-          </ControlTemplate>
-        </s:DesignerItem.DragThumbTemplate>
-      </Path>
 
       <Path Style="{StaticResource Decision}" ToolTip="Decision">
         <s:DesignerItem.DragThumbTemplate>
@@ -319,13 +288,7 @@
         </s:DesignerItem.ConnectorDecoratorTemplate>
       </Path>
 
-      <Path Style="{StaticResource Start}" ToolTip="Start">
-        <s:DesignerItem.DragThumbTemplate>
-          <ControlTemplate>
-            <Path Style="{StaticResource Start_DragThumb}"/>
-          </ControlTemplate>
-        </s:DesignerItem.DragThumbTemplate>
-      </Path>
+
 
       <Path Style="{StaticResource PaperTape}" ToolTip="Paper Tape">
         <s:DesignerItem.DragThumbTemplate>
@@ -371,13 +334,7 @@
         </s:DesignerItem.ConnectorDecoratorTemplate>
       </Path>
 
-      <Path Style="{StaticResource InternalStorage}" ToolTip="Internal Storage">
-        <s:DesignerItem.DragThumbTemplate>
-          <ControlTemplate>
-            <Path Style="{StaticResource InternalStorage_DragThumb}"/>
-          </ControlTemplate>
-        </s:DesignerItem.DragThumbTemplate>
-      </Path>
+
 
       <Path Style="{StaticResource SequentialData}" ToolTip="Sequential Data">
         <s:DesignerItem.DragThumbTemplate>
