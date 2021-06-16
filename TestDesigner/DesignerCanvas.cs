@@ -15,7 +15,6 @@ namespace DiagramDesigner
     public partial class DesignerCanvas : Canvas
     {
         private Point? rubberbandSelectionStartPoint = null;
-        private Window1ViewModel window1ViewModel = new Window1ViewModel();
 
         private SelectionService selectionService;
         internal SelectionService SelectionService

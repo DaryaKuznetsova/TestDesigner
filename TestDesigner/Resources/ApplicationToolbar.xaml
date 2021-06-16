@@ -7,6 +7,64 @@
         <ResourceDictionary Source="Styles/ToolBar.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 
+
+    <Menu x:Key="MyMenu" Height="30" VerticalAlignment="Top">
+        <!--File-->
+        <MenuItem Header="File" Height="30">
+            <MenuItem Header="New" 
+                      Command="{x:Static ApplicationCommands.New}"
+                      CommandTarget="{Binding ElementName=MyDesigner}">
+            </MenuItem>
+            <MenuItem Header="Open" 
+                      Command="{x:Static ApplicationCommands.Open}"
+                      CommandTarget="{Binding ElementName=MyDesigner}">
+            </MenuItem>
+            <MenuItem Header="Save" 
+                      Command="{x:Static ApplicationCommands.Save}"
+                      CommandTarget="{Binding ElementName=MyDesigner}">
+            </MenuItem>
+        </MenuItem>
+        <!--Edit-->
+        <MenuItem Header="Edit">
+            <MenuItem Header="Delete"
+                      Command="{x:Static ApplicationCommands.Delete}"
+                      CommandTarget="{Binding ElementName=MyDesigner}">
+            </MenuItem>
+        </MenuItem>
+
+        <!--Arrange-->
+        <MenuItem Header="Arrange">
+            <MenuItem Header="Bring forward"
+                      Command="{x:Static s:DesignerCanvas.BringForward}"
+                      CommandTarget="{Binding ElementName=MyDesigner}">
+                <MenuItem.Icon>
+                    <Image Source="Images/BringForward.png" Width="16"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Header="Bring to front"
+                      Command="{x:Static s:DesignerCanvas.BringToFront}"
+                      CommandTarget="{Binding ElementName=MyDesigner}">
+                <MenuItem.Icon>
+                    <Image Source="Images/BringToFront.png" Width="16"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Header="Send backward"
+                      Command="{x:Static s:DesignerCanvas.SendBackward}"
+                      CommandTarget="{Binding ElementName=MyDesigner}">
+                <MenuItem.Icon>
+                    <Image Source="Images/SendBackward.png" Width="16"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Header="Send to back"
+                      Command="{x:Static s:DesignerCanvas.SendToBack}"
+                      CommandTarget="{Binding ElementName=MyDesigner}">
+                <MenuItem.Icon>
+                    <Image Source="Images/SendToBack.png" Width="16"/>
+                </MenuItem.Icon>
+            </MenuItem>
+        </MenuItem>
+    </Menu>
+
     <ToolBar x:Key="MyToolbar" Height="120">
         <!--File-->
         <GroupBox Header="File" Style="{StaticResource ToolbarGroup}" Margin="5,3,3,3">
@@ -44,7 +102,7 @@
                     </Button>
                     <Button Margin="1" Padding="2" HorizontalContentAlignment="Left"
                             Style="{StaticResource ToolBarButtonBaseStyle}"
-                            Command="{Binding SaveDiagramCommand}"
+                            Command="{x:Static ApplicationCommands.Save}"
                             CommandTarget="{Binding ElementName=MyDesigner}">
                         <Button.Content>
                             <Grid>

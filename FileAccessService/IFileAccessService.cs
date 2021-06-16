@@ -12,9 +12,6 @@ namespace FileService
         //save methods
         int SaveDiagram(DiagramItem diagram);
 
-
-        //Fetch methods
-        IEnumerable<DiagramItem> FetchAllDiagram();
         DiagramItem FetchDiagram(int diagramId);
         //PersistDesignerItem is pecific to the DemoApp example
         DesignerItem FetchDesignerItem(int designerItemId);
